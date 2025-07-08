@@ -1,1 +1,9 @@
 @import "tailwindcss";
+
+* {
+  font-family: Outfit;
+}
+
+.active hr {
+  @apply block;
+}
