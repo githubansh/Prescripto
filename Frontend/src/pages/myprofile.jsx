@@ -6,7 +6,7 @@ const MyProfile = () => {
     const [isEdit, setIsEdit] = useState(false)
 
     const [userData, setUserData] = useState({
-        name: "Richard James",
+        name: "Ansh Gadwal",
         image: assets.profile_pic,
         email: 'richardjames@gmail.com',
         phone: '+1  123 456 7890',
