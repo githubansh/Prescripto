@@ -1,7 +1,8 @@
 import  express  from "express";
-import { addDoctor,loginAdmin } from "../controllers/adminController.js";
+import { addDoctor,allDoctors,loginAdmin } from "../controllers/adminController.js";
 import upload from "../middlewares/multer.js";
 import authAdmin from "../middlewares/authAdmin.js";
+import { changeAvailablity } from '../controllers/doctorController.js';
 
 const adminRouter = express.Router()
 
@@ -15,6 +16,8 @@ addDoctor:
 The actual controller function that handles the rest of the request — saves doctor details, stores file info, etc.
 */
 adminRouter.post('/login', loginAdmin )
+adminRouter.get('/all-doctors',authAdmin,allDoctors)
+adminRouter.post("/change-availability", authAdmin, changeAvailablity)
 
 
 export default adminRouter
