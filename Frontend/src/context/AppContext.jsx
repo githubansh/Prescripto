@@ -10,6 +10,10 @@ const AppContextProvider = (props) => {
     const backendURL = import.meta.env.VITE_BACKEND_URL
 
     const [doctors, setDoctors] = useState([])
+    const [token, setToken] = useState(localStorage.getItem('token') ? localStorage.getItem('token') : '')
+    const [userData, setUserData] = useState(false)
+
+
 
     // Getting Doctors using API
     const getDoctorsData = async () => {
@@ -35,7 +39,9 @@ const AppContextProvider = (props) => {
 
     const value = {
         doctors,getDoctorsData,
-        currencySymbol
+        currencySymbol,
+        backendURL,     
+        token, setToken
     }
 
     return (

@@ -25,6 +25,7 @@ app.use('/api/admin',adminRouter)  // so for //localhost:port/api/admin adminRou
 app.use("/api/user", userRouter)
 
 
+
 app.get('/',(req,res)=>{
     res.send("lalallalal")
 })
