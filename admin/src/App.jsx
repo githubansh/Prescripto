@@ -42,7 +42,7 @@ const App = () => {
   ) : (
     
     <>
-     {/* below code will execute jab token nhi hai mtlb ki user is not loged in , so loign kro  */}
+     {/* below code will execute jab token nhi hai mtlb ki user is not loged in , so first login  */}
       <ToastContainer />
       <Login />
     </>

@@ -15,7 +15,7 @@ const Navbar = () => {
     navigate('/')
     dToken && setDToken('')
     dToken && localStorage.removeItem('dToken')
-    aToken && setAToken('')
+    aToken && setAToken('') // see after executing this line , atoken ko empty hone me time lgta hai so second line bhi execute ho jayegi itne me , ie why settoken are ashnychronous functs
     aToken && localStorage.removeItem('aToken')
   }
 

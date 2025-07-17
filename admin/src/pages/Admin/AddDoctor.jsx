@@ -20,7 +20,7 @@ const AddDoctor = () => {
     const [address2, setAddress2] = useState('')
 
     const { backendUrl } = useContext(AppContext)
-    const { aToken } = useContext(AdminContext)
+    const {aToken} = useContext(AdminContext)
 
     const onSubmitHandler = async (event) => {
         event.preventDefault()
@@ -31,8 +31,9 @@ const AddDoctor = () => {
                 return toast.error('Image Not Selected')
             }
 
+            //creating form data 
             const formData = new FormData();
-
+          //formaData.append(naming of data , what is adding in form)   
             formData.append('image', docImg)
             formData.append('name', name)
             formData.append('email', email)
@@ -49,8 +50,11 @@ const AddDoctor = () => {
                 console.log(`${key}: ${value}`);
             });
 
+             //api calling of abckend to add in database
             const { data } = await axios.post(backendUrl + '/api/admin/add-doctor', formData, { headers: { aToken } })
+          //the response will be inside data varibale
             if (data.success) {
+                //database me add krne ke bad reset krna pdega sabhi fields ko ie below
                 toast.success(data.message)
                 setDocImg(false)
                 setName('')
@@ -68,9 +72,9 @@ const AddDoctor = () => {
         } catch (error) {
             toast.error(error.message)
             console.log(error)
-        }
+        } 
 
-    }
+    } 
 
     return (
         <form onSubmit={onSubmitHandler} className='m-5 w-full'>
@@ -91,7 +95,7 @@ const AddDoctor = () => {
                     <div className='w-full lg:flex-1 flex flex-col gap-4'>
 
                         <div className='flex-1 flex flex-col gap-1'>
-                            <p>Your name</p>
+                            <p>Doctor name</p>
                             <input onChange={e => setName(e.target.value)} value={name} className='border rounded px-3 py-2' type="text" placeholder='Name' required />
                         </div>
 
