@@ -7,7 +7,7 @@ export const AdminContext = createContext()
 
 const AdminContextProvider = (props) => {
 
-    const backendUrl = import.meta.env.VITE_BACKEND_URL
+    const backendUrl = import.meta.env.VITE_BACKEND_Url
 
     const [aToken, setAToken] = useState(localStorage.getItem('aToken') ? localStorage.getItem('aToken') : '')
 
@@ -60,6 +60,7 @@ const AdminContextProvider = (props) => {
             const { data } = await axios.get(backendUrl + '/api/admin/appointments', { headers: { aToken } })
             if (data.success) {
                 setAppointments(data.appointments.reverse())
+                console.log(data)
             } else {
                 toast.error(data.message)
             }
@@ -71,7 +72,7 @@ const AdminContextProvider = (props) => {
 
     }
 
-    // Function to cancel appointment using API
+    // api call  to cancel appointment of a user 
     const cancelAppointment = async (appointmentId) => {
 
         try {
