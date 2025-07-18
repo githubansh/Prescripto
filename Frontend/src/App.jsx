@@ -15,6 +15,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const App = () => {
   
+  //completed
   return (
     <div className='mx-4 sm:mx-[10%]'>
       <ToastContainer />
