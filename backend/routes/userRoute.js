@@ -1,6 +1,6 @@
 import express from 'express';
 // line 3 : its called destructuring
-import { registerUser,loginUser, getProfile,updateProfile, bookAppointment, listAppointments, cancelAppointment } from '../controllers/userController.js';
+import { registerUser,loginUser, getProfile,updateProfile, bookAppointment, listAppointments, cancelAppointment, paymentRazorpay,verifyRazorpay } from '../controllers/userController.js';
 import authUser from '../middlewares/authUser.js';
 import upload from '../middlewares/multer.js';
 
@@ -14,5 +14,7 @@ userRouter.post("/update-profile", upload.single('image'), authUser, updateProfi
 userRouter.post("/book-appointment" , authUser , bookAppointment)
 userRouter.get("/userAppointments",authUser,listAppointments)
 userRouter.post("/cancel-appointment",authUser,cancelAppointment)
+userRouter.post("/payment-razorpay",authUser,paymentRazorpay)
+userRouter.post("/verifyRazorpay", authUser, verifyRazorpay)
 
 export default userRouter;

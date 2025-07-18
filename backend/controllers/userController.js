@@ -250,19 +250,51 @@ const razorpayInstance = new razorpay ({
 
 const paymentRazorpay = async(req,res) =>{
 
-    const {appointmentId} =req.body
-    const appointmentData = await appointmentModel.findById(appointmentId)
+    try {
+        const {appointmentId} =req.body
+        const appointmentData = await appointmentModel.findById(appointmentId)
+    
+        if (!appointmentData || appointmentData.cancelled) {
+            return res.json({success:false , message :"appointment cancelled or not found"})
+            
+        }
+         // creating options for razorpay payment
+         const options = {
+            amount: appointmentData.amount * 100,
+            currency: process.env.CURRENCY,
+            receipt: appointmentId,
+        }
+    
+        // creation of an order
+        const order = await razorpayInstance.orders.create(options)
+    
+        res.json({ success: true, order })
 
-    if (!appointmentData || appointmentData.cancelled) {
-        return res.json({success:false , message :"appointment cancelled or not found"})
-        
+    } catch (error) {
+        console.log(error)
+        res.json({ success: false, message: error.message })
     }
-    //creating options for razorpay payments
-    // const options ={
-    //     amount : appointmentData.
-    // }
+}
+
+// API to verify payment of razorpay
+const verifyRazorpay = async (req, res) => {
+    try {
+        const { razorpay_order_id } = req.body
+        const orderInfo = await razorpayInstance.orders.fetch(razorpay_order_id)
+
+        if (orderInfo.status === 'paid') {
+            await appointmentModel.findByIdAndUpdate(orderInfo.receipt, { payment: true })
+            res.json({ success: true, message: "Payment Successful" })
+        }
+        else {
+            res.json({ success: false, message: 'Payment Failed' })
+        }
+    } catch (error) {
+        console.log(error)
+        res.json({ success: false, message: error.message })
+    }
 }
 
 export {
-    registerUser,loginUser,getProfile,updateProfile, bookAppointment , listAppointments, cancelAppointment
+    registerUser,loginUser,getProfile,updateProfile, bookAppointment , listAppointments, cancelAppointment,paymentRazorpay,verifyRazorpay
 }
