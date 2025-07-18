@@ -1,6 +1,7 @@
 import { createContext,useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import axios from 'axios'
+import { assets } from "../assets/assets";
 
 export const AppContext = createContext()
 
@@ -33,6 +34,33 @@ const AppContextProvider = (props) => {
         }
 
     }
+
+    // Getting User Profile using API
+    const loadUserProfileData = async () => {
+
+        try {
+
+            const { data } = await axios.get(backendURL + '/api/user/get-profile', { headers: { token } })
+
+            if (data.success) {
+                setUserData(data.userData)
+            } else {
+                toast.error(data.message)
+            }
+
+        } catch (error) {
+            console.log(error)
+            toast.error(error.message)
+        }
+
+    }
+
+    useEffect(() => {
+        if (token) {
+            loadUserProfileData()
+        }
+    }, [token])
+
     useEffect(() => {
         getDoctorsData()
     }, [])
@@ -41,7 +69,8 @@ const AppContextProvider = (props) => {
         doctors,getDoctorsData,
         currencySymbol,
         backendURL,     
-        token, setToken
+        token, setToken,
+        userData, setUserData, loadUserProfileData
     }
 
     return (
