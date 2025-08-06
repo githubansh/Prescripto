@@ -10,7 +10,7 @@ const Footer = () => {
            {/* left section */}
           <div>
            <img className='mb-5 w-40' src= {assets.logo} alt="" />
-           <p className='w-full md:w-2/3 text-gray-600 leading-6 '>mai hu don, mera samrajya </p>
+           <p className='w-full md:w-2/3 text-gray-600 leading-6 '>Prescripto is your reliable companion for managing healthcare needs with ease and efficiency. Our platform connects patients with a wide network of verified doctors across multiple specialties, allowing you to browse profiles, check availability, and book appointments—all from the comfort of your home. Prescripto ensures a smooth and stress-free healthcare experience. Whether you need a routine check-up or a specialist consultation, Prescripto is here to make quality healthcare just a click away. </p>
           </div>
 
 
@@ -40,7 +40,7 @@ const Footer = () => {
 
 
       <div>
-         <p className='py-5 text-sm text-center'> Copyright 2025 @Gadwal Bhavan</p> 
+         <p className='py-5 text-sm text-center'> Copyright 2025 @ Prescripto.com - All Right Reserved.</p> 
 
       </div>
 
