@@ -6,7 +6,7 @@ import { useEffect } from 'react'
 import Appointment from './Appointment'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
-import {assets} from '../asseets/assets'
+import {assets} from '../assets/assets'
 
 const MyAppointments = () => {
 
