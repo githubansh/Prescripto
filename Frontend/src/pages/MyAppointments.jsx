@@ -1,38 +1,35 @@
-import React, { useContext } from 'react'
-import { AppContext } from '../context/AppContext'
-import { useState } from 'react'
-import axios from 'axios'
-import { useEffect } from 'react'
-import Appointment from './Appointment'
-import { toast } from 'react-toastify'
+import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import {assets} from '../assets/assets'
+import { AppContext } from '../context/AppContext'
+import axios from 'axios'
+import { toast } from 'react-toastify'
+import { assets } from '../assets/assets'
 
 const MyAppointments = () => {
 
-    const { backendURL , token, getDoctorsData } = useContext(AppContext)
-    const[appointments, setAppointments]= useState([])
+    const { backendUrl, token } = useContext(AppContext)
     const navigate = useNavigate()
+
+    const [appointments, setAppointments] = useState([])
     const [payment, setPayment] = useState('')
 
-    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]; // to destructure string date into real looking
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
     // Function to format the date eg. ( 20_01_2000 => 20 Jan 2000 )
     const slotDateFormat = (slotDate) => {
         const dateArray = slotDate.split('_')
-        return dateArray[0] + " " + months[Number(dateArray[1])-1] + " " + dateArray[2]
+        return dateArray[0] + " " + months[Number(dateArray[1])] + " " + dateArray[2]
     }
 
-
-    const getUserAppointments = async () =>{
-
+    // Getting User Appointments Data Using API
+    const getUserAppointments = async () => {
         try {
-             const {data}= await axios.get(backendURL + '/api/user/userAppointments' , {headers : {token}})
-             if(data.success){
-                setAppointments(data.appointments.reverse()) // new appointment will be on top 
-               
-             }
+
+            const { data } = await axios.get(backendUrl + '/api/user/appointments', { headers: { token } })
+            setAppointments(data.appointments.reverse())
+
         } catch (error) {
-            console.log(error);
+            console.log(error)
             toast.error(error.message)
         }
     }
@@ -42,12 +39,11 @@ const MyAppointments = () => {
 
         try {
 
-            const { data } = await axios.post(backendURL + '/api/user/cancel-appointment', { appointmentId }, { headers: { token } })
+            const { data } = await axios.post(backendUrl + '/api/user/cancel-appointment', { appointmentId }, { headers: { token } })
 
             if (data.success) {
                 toast.success(data.message)
                 getUserAppointments()
-                getDoctorsData()
             } else {
                 toast.error(data.message)
             }
@@ -57,8 +53,7 @@ const MyAppointments = () => {
             toast.error(error.message)
         }
 
-    } 
-     
+    }
 
     const initPay = (order) => {
         const options = {
@@ -74,10 +69,10 @@ const MyAppointments = () => {
                 console.log(response)
 
                 try {
-                    const { data } = await axios.post(backendURL + "/api/user/verifyRazorpay", response, { headers: { token } });
+                    const { data } = await axios.post(backendUrl + "/api/user/verifyRazorpay", response, { headers: { token } });
                     if (data.success) {
-                        getUserAppointments()
                         navigate('/my-appointments')
+                        getUserAppointments()
                     }
                 } catch (error) {
                     console.log(error)
@@ -89,28 +84,44 @@ const MyAppointments = () => {
         rzp.open();
     };
 
-
-   // Function to make payment using razorpay
-   const appointmentRazorpay = async (appointmentId) => {
-    try {
-        const { data } = await axios.post(backendURL + '/api/user/payment-razorpay', { appointmentId }, { headers: { token } })
-        if (data.success) {
-            initPay(data.order)
-        }else{
-            toast.error(data.message)
+    // Function to make payment using razorpay
+    const appointmentRazorpay = async (appointmentId) => {
+        try {
+            const { data } = await axios.post(backendUrl + '/api/user/payment-razorpay', { appointmentId }, { headers: { token } })
+            if (data.success) {
+                initPay(data.order)
+            }else{
+                toast.error(data.message)
+            }
+        } catch (error) {
+            console.log(error)
+            toast.error(error.message)
         }
-    } catch (error) {
-        console.log(error)
-        toast.error(error.message)
     }
-}
 
-
-    useEffect(()=>{
-        if (token) {
-            getUserAppointments();
+    // Function to make payment using stripe
+    const appointmentStripe = async (appointmentId) => {
+        try {
+            const { data } = await axios.post(backendUrl + '/api/user/payment-stripe', { appointmentId }, { headers: { token } })
+            if (data.success) {
+                const { session_url } = data
+                window.location.replace(session_url)
+            }else{
+                toast.error(data.message)
+            }
+        } catch (error) {
+            console.log(error)
+            toast.error(error.message)
         }
-    },[token])
+    }
+
+
+
+    useEffect(() => {
+        if (token) {
+            getUserAppointments()
+        }
+    }, [token])
 
     return (
         <div>
